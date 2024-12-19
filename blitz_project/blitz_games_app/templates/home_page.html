@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="interactive-image" id="image-1">
+        <a href="{% url 'movies_page' %}">
+            <img src="{% static 'images/movies_quiz_image.webp' %}" alt="Movies Game">
+        </a>
+    </div>
+    <div class="interactive-image" id="image-2">
+        <a href="{% url 'music_page' %}">
+            <img src="{% static 'images/music_quiz_image.avif' %}" alt="Songs Game">
+        </a>
+    </div>
+</div>
+{% endblock %}

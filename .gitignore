@@ -122,7 +122,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+blitz_project/.env
 .venv
 env/
 venv/
