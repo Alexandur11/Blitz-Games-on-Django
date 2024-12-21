@@ -81,9 +81,10 @@ WSGI_APPLICATION = 'blitz_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',  # BASE_DIR is typically already defined in settings.py
     }
 }
+
 
 
 # Password validation

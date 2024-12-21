@@ -3,17 +3,26 @@ from django.db import models
 from django.conf import settings
 import requests
 
+from .series_db import Series
+from .movies_db import Movie
 class MoviesPage(models.Model):
-    app_label = 'blitz_games_app'
-    title = models.CharField(max_length=100)
-    content = models.TextField()
+    class Meta:
+        app_label = 'blitz_games_app'
 
     def __str__(self):
         return self.title
 
+
+    def get_movies(self):
+        movies = Series.objects.all()  # Fetch all records from the MoviesPage model.
+
+        for movie in movies:
+            print(movie.title, movie.id)
+
     def imdb_data(self):
-        url = "https://imdb236.p.rapidapi.com/imdb/types"
         rapid_api_key = getattr(settings, 'RAPID_API_KEY', None)  # Use getattr to safely access settings
+        movies_url = 'https://imdb236.p.rapidapi.com/imdb/top250-movies'
+        series_url = 'https://imdb236.p.rapidapi.com/imdb/top250-tv'
 
         if rapid_api_key is None:
             print("RAPID_API_KEY not set in settings.")
@@ -24,5 +33,14 @@ class MoviesPage(models.Model):
             "x-rapidapi-host": "imdb236.p.rapidapi.com"
         }
 
-        response = requests.get(url, headers=headers)
-        print(response.json())
+        series_response = requests.get(series_url, headers=headers)
+        movie_response = requests.get(movies_url,headers=headers)
+
+        for x in series_response.json():
+            print(x)
+            Series(**x).save()
+
+        for x in movie_response.json():
+            print(x)
+            Movie(**x).save()
+

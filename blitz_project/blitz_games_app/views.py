@@ -6,8 +6,11 @@ from.models.music.music_page import MusicPage
 
 def home_page(request):
     page = HomePage.objects.first()
-    h = MoviesPage().imdb_data()
-    print(h)
+
+    H = MoviesPage()
+    data = H.imdb_data()
+    # H.get_movies()
+
     return render(request, 'home_page.html', {'page': page})
 
 def movies_page(request):

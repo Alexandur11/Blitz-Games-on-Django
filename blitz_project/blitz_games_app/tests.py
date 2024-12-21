@@ -1,7 +1,5 @@
-from django.test import TestCase
+from models.movies.movies_db import Movie
+movies = Movie.objects.all()  # Fetch all records from the MoviesPage model.
 
-from blitz_project.blitz_games_app.models.movies.movies_page import MoviesPage
-
-movies = MoviesPage()
-
-movies.imdb_data()
+for movie in movies:
+    print(movie.title, movie.id, movie.average_rating)
