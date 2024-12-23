@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Random Movie{% endblock %}
+
+{% block extra_css %}
+<style>
+    .movie-card {
+        background-color: black;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        text-align: center;
+        overflow: hidden;
+        margin: 20px auto;
+    }
+    .movie-card img {
+        width: 100%;
+        height: 50%;
+
+
+    }
+    .movie-card .details {
+        padding: 15px;
+    }
+    .hidden-rating {
+        display: none;
+        font-weight: bold;
+        color: #ff4500;
+        margin-top: 10px;
+    }
+    .reveal-button {
+        margin-top: 10px;
+        padding: 8px 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .reveal-button:hover {
+        background-color: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="movie-card">
+    <img src="{{ random_movie.primaryImage }}" alt="{{ random_movie.title }}">
+    <div class="details">
+        <h2>{{ random_movie.title }}</h2>
+        <p><strong>Year:</strong> {{ random_movie.startYear }}</p>
+        <p><strong>Content Rating:</strong> {{ random_movie.contentRating }}</p>
+        <p><strong>Number of Votes:</strong> {{ random_movie.numVotes }}</p>
+        <p>{{ random_movie.description }}</p>
+        <!-- Hidden Rating -->
+        <p class="hidden-rating" id="movie-rating">
+            Rating: {{ random_movie.averageRating }}
+        </p>
+        <!-- Reveal Button -->
+        <button class="reveal-button" onclick="revealRating()">Reveal Rating</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function revealRating() {
+        const ratingElement = document.getElementById('movie-rating');
+        ratingElement.style.display = 'block'; // Show the hidden rating
+    }
+</script>
+{% endblock %}

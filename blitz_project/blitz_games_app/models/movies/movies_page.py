@@ -13,12 +13,6 @@ class MoviesPage(models.Model):
         return self.title
 
 
-    def get_movies(self):
-        movies = Series.objects.all()  # Fetch all records from the MoviesPage model.
-
-        for movie in movies:
-            print(movie.title, movie.id)
-
     def imdb_data(self):
         rapid_api_key = getattr(settings, 'RAPID_API_KEY', None)  # Use getattr to safely access settings
         movies_url = 'https://imdb236.p.rapidapi.com/imdb/top250-movies'

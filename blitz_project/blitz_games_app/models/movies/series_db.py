@@ -16,5 +16,5 @@ class Series(models.Model):
     type = models.CharField(max_length=50, default="tvSeries")  # Type of content, defaulted to "tvSeries"
 
     def __str__(self):
-        return self.title
-
+        return f"{self.title} | {self.url} | {self.primaryImage} | {self.description} " \
+               f"| {self.startYear} | {self.contentRating} | {self.averageRating} | {self.numVotes} | {self.type}"
