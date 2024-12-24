@@ -1,18 +1,12 @@
 import random
 
 from django.shortcuts import render
-from .models.home_page.home_page import HomePage
-from .models.movies.movies_db import Movie
-from .models.movies.series_db import Series
+
+from .models import Movie,Series
+from .utilities.utilities import *
 
 
 def home_page(request):
-    page = HomePage.objects.first()
-
-    # H = MoviesPage()
-    # data = H.imdb_data()
-    # # H.get_movies()
-
     return render(request, 'home_page.html', {})
 
 
@@ -27,5 +21,15 @@ def tv_shows_page(request):
     return render(request,'series_page.html',{'random_tv_show':random_tv_show})
 
 def music_page(request):
-    page = Movie.objects.first()
+    j_cole = 69
+    songs = recursive_collection(j_cole,1)
+    songs_list = []
+    for x in songs:
+        if x:
+            songs_list.extend(x)
+
+    print(songs_list)
+
+
+
     return render(request, 'home_page.html', {})

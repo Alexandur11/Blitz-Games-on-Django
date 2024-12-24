@@ -135,4 +135,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # API KEYS
-RAPID_API_KEY = os.getenv('RAPID_API_KEY')
+IMDB_API_KEY = os.getenv('IMDB_API_KEY')
+GENIUS_API_KEY = os.getenv('GENIUS_API_KEY')
