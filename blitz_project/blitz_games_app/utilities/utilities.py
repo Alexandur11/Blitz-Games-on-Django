@@ -20,7 +20,7 @@ def get_artist_albums(artist_id):
     for x in albums:
         album_id = x['id']
         print(type(album_id))
-        # albums(album_id)
+
 
 def album_details(album_id):
     print(album_id)
@@ -47,8 +47,8 @@ def artist_songs(artist_id,page):
         "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
     }
 
-    response =  requests.get(url, headers=headers, params=querystring)
-    print(response.status_code)
+    return requests.get(url, headers=headers, params=querystring).json()
+
 
 
 
@@ -60,13 +60,25 @@ def collect_songs(songs):
     return filtered_songs
 
 
+
 def recursive_collection(artist_id,page):
     if not page:
         return
 
+
     info = artist_songs(artist_id, page)
-    print(info)
-    # filtered_songs = collect_songs(info['songs'])
-    # return filtered_songs, recursive_collection(artist_id,info['next_page'])
+    filtered_songs = collect_songs(info['songs'])
+    return filtered_songs, recursive_collection(artist_id,info['next_page'])
 
 
+def get_song_lyrics(song_id):
+    url = "https://genius-song-lyrics1.p.rapidapi.com/song/lyrics/"
+
+    querystring = {"id": int(song_id)}
+
+    headers = {
+        "x-rapidapi-key": GENIUS_API_KEY,
+        "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
+    }
+
+    return requests.get(url, headers=headers, params=querystring).json()

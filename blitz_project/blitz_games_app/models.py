@@ -39,3 +39,8 @@ class Series(models.Model):
     def __str__(self):
         return f"{self.title} | {self.url} | {self.primaryImage} | {self.description} " \
                f"| {self.startYear} | {self.contentRating} | {self.averageRating} | {self.numVotes} | {self.type}"
+
+class Artists(models.Model):
+    id = models.CharField(max_length=40,primary_key=True)
+    songs = models.TextField()
+
