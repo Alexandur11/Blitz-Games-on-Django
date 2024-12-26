@@ -2,3 +2,4 @@ Django
 requests
 python_dotenv
 mysqlclient
+beautifulsoup4

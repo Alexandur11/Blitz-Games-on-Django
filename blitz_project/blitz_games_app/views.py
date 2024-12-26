@@ -28,24 +28,25 @@ def tv_shows_page(request):
 
 def music_page(request):
 
-    songs = recursive_collection(None,1)
-    songs_list = []
-    for x in songs:
-        if x:
-            songs_list.extend(x)
-    songs_list.pop()
-    Artists(id=2,songs=songs_list).save()
+    # songs = recursive_collection(None,1)
+    # songs_list = []
+    # for x in songs:
+    #     if x:
+    #         songs_list.extend(x)
+    # songs_list.pop()
+    # Artists(id=2,songs=songs_list).save()
+    #
+    #
+    # # MS.quiz_preparation(artists)
+
+    artists = Artists.objects.all()
+
+    artist = random.choice(artists)
+    text = 'asdas'
 
 
-    # MS.quiz_preparation(artists)
 
-
-
-
-
-
-
-    return render(request, 'home_page.html', {})
+    return render(request, 'music_page.html', {'artist':artist,'text':text})
 
 
 cole = [599410, 4254003, 6808751, 5838250, 5838217, 354242, 3656498, 3753813, 3691852,

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Silhouette Card{% endblock %}
+
+{% block content %}
+<div class="card-container">
+    <div class="card-image">
+        <img id="image" src="{% static 'images/singing_alt.jpeg' %}" alt="{% static 'images/singing_alt.jpeg' %}">
+    </div>
+    <div class="card-text">
+        {{ text }}  <!-- Display the dynamic text here -->
+    </div>
+    <button id="reveal-btn">Reveal</button>
+    <div id="artist-details" style="display:none;">
+        <p><strong>Artist Name:</strong> {{ artist.name }}</p>
+        <p><strong>Song Name:</strong> {{ artist.song_name }}</p>
+        <img id="artist-image" src="{{ artist.image }}" alt="Artist Image">
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        margin: 50px auto;
+        text-align: center;
+        background-color: #444; /* Card background color */
+        border: 2px solid #fff; /* White border for contrast */
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.7); /* Glow and shadow */
+    }
+
+    .card-image img {
+    }
+
+    #reveal-btn {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #ff4081;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #reveal-btn:hover {
+        background-color: #ff6090;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById('reveal-btn').addEventListener('click', function() {
+        const image = document.getElementById('image');
+        const artistDetails = document.getElementById('artist-details');
+        image.src = '{{ artist.image }}'; // Show artist image
+        artistDetails.style.display = 'block'; // Reveal the artist details section
+    });
+</script>
+{% endblock %}

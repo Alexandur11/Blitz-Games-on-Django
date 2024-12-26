@@ -43,4 +43,7 @@ class Series(models.Model):
 class Artists(models.Model):
     id = models.CharField(max_length=40,primary_key=True)
     songs = models.TextField()
+    image = models.URLField(default='https://img.freepik.com/premium-vector/man-singer-silhouette-man-singing-mic-singer-singing-silhouette-vocalist-singing-microphone_690577-1487.jpg?w=1060')
+
+
 
