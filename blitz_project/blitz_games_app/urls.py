@@ -1,10 +1,13 @@
 
 from django.urls import path
-from .views import home_page, music_page, movies_page, tv_shows_page
+from . import views
 
 urlpatterns = [
-    path('', home_page, name='home_page'),  # Root URL to the home_page view
-    path('guess_the_song', music_page, name='music_page'),
-    path('guess_the_tv_show_rating',tv_shows_page, name='series_page'),
-    path('guess_the_movie_rating',movies_page, name='movies_page')
+    path('', views.home_page, name='home_page'),  # Root URL to the home_page view
+    path('guess_the_song', views.music_page, name='music_page'),
+    path('guess_the_tv_show_rating',views.tv_shows_page, name='series_page'),
+    path('guess_the_movie_rating',views.movies_page, name='movies_page'),
+    path('random_movie',views.random_movie,name='random_movie'),
+    path('random_show',views.random_show,name='random_show'),
+    path('random_song',views.random_song,name='random_song'),
 ]

@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-o3ug2fz%+i-u0ol9q3&sq6&4q%z@4-w!dbzzf5u@n%rh(_l%)1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['b687-212-95-171-92.ngrok-free.app','127.0.0.1']
 
 
 # Application definition
@@ -138,4 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # API KEYS
 IMDB_API_KEY = os.getenv('IMDB_API_KEY')
-GENIUS_API_KEY = os.getenv('GENIUS_API_KEY2')
+GENIUS_API_KEY = os.getenv('GENIUS_API_KEY')
+GENIUS_API_KEY2 = os.getenv('GENIUS_API_KEY2')
+DISCORD_BOT_TOKEN = os.getenv('DISCORD_BOT_TOKEN')
+DISCORD_PUBLIC_KEY= os.getenv('DISCORD_PUBLIC_KEY')

@@ -1,15 +1,61 @@
-import pdb
+
 import random
 
 from django.shortcuts import render
-
 from .models import Movie,Series,Artists
-from .utilities.utilities import *
-from .utilities.parsing_utilities import *
 from .services.music_service import MusicService
+
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
+
+
 
 MS = MusicService()
 artists = Artists.objects.all()
+movies = Movie.objects.all()
+shows = Series.objects.all()
+
+def random_movie(request):
+    random_movie = random.choice(movies)
+    data =  {'title':random_movie.title,
+            'image':random_movie.primaryImage,
+            'year':random_movie.startYear,
+            'content_rating':random_movie.contentRating,
+            'votes':random_movie.numVotes,
+            'description':random_movie.description,
+            'average_rating':random_movie.averageRating}
+
+    return JsonResponse(data)
+
+def random_show(request):
+    random_show = random.choice(shows)
+    data =  {'title':random_show.title,
+            'image':random_show.primaryImage,
+            'year':random_show.startYear,
+            'content_rating':random_show.contentRating,
+            'votes':random_show.numVotes,
+            'description':random_show.description,
+            'average_rating':random_show.averageRating}
+
+    return JsonResponse(data)
+
+def random_song(request):
+    MS.quiz_preparation(artists)
+
+    data =  {'artist':MS.artist,
+            'song':MS.song_title,
+            'verse':MS.quiz_verse}
+
+    return JsonResponse(data)
+
+
+from django.http import JsonResponse
+import json
+
+
+# Verification function remains as before if you want signature validation
+# from your previous code.
 
 
 def home_page(request):
@@ -17,13 +63,11 @@ def home_page(request):
 
 
 def movies_page(request):
-    movies = Movie.objects.all()
     random_movie = random.choice(movies)
     return render(request, 'movie_page.html', {'random_movie':random_movie})
 
 def tv_shows_page(request):
-    tv_shows = Series.objects.all()
-    random_tv_show = random.choice(tv_shows)
+    random_tv_show = random.choice(shows)
     return render(request,'series_page.html',{'random_tv_show':random_tv_show})
 
 def music_page(request):

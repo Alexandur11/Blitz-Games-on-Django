@@ -1,8 +1,12 @@
 import requests
+import random
 from django.conf import settings
 
 
-GENIUS_API_KEY = getattr(settings, 'GENIUS_API_KEY', None)
+GENIUS_KEYS = [getattr(settings, 'GENIUS_API_KEY', None),
+               getattr(settings, 'GENIUS_API_KEY2', None)]
+
+GENIUS_API_KEY = random.choice(GENIUS_KEYS)
 def get_artist_albums(artist_id):
 
     url = "https://genius-song-lyrics1.p.rapidapi.com/artist/albums/"
@@ -81,4 +85,7 @@ def get_song_lyrics(song_id):
         "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
     }
 
-    return requests.get(url, headers=headers, params=querystring).json()
+    response =  requests.get(url, headers=headers, params=querystring)
+    if response.status_code != 200:
+        return response.content
+    return response.json()
