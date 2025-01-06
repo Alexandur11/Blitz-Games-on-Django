@@ -84,8 +84,6 @@ def parse_song_lyrics(html_content):
 
         for item in parsed_data:
             song_verses.append({item['lyrics']})
-            print(f"\nLyrics: {item['lyrics']}\n")
-
         return song_verses
     except Exception as e:
         raise e

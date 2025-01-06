@@ -2,10 +2,12 @@ import requests
 import random
 from django.conf import settings
 
-GENIUS_KEYS = [getattr(settings, 'GENIUS_API_KEY', None),
-               getattr(settings, 'GENIUS_API_KEY2', None)]
+def setup_key():
+    GENIUS_KEYS = [getattr(settings, 'GENIUS_API_KEY', None),
+                   getattr(settings, 'GENIUS_API_KEY2', None)]
 
-GENIUS_API_KEY = random.choice(GENIUS_KEYS)
+    return random.choice(GENIUS_KEYS)
+
 
 
 def get_artist_albums(artist_id):
@@ -14,7 +16,7 @@ def get_artist_albums(artist_id):
     querystring = {"id": artist_id, "sort": "title", "per_page": "20", "page": "1"}
 
     headers = {
-        "x-rapidapi-key": GENIUS_API_KEY,
+        "x-rapidapi-key": setup_key(),
         "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
     }
 
@@ -33,7 +35,7 @@ def album_details(album_id):
     querystring = {"id": album_id}
 
     headers = {
-        "x-rapidapi-key": GENIUS_API_KEY,
+        "x-rapidapi-key": setup_key(),
         "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
     }
 
@@ -48,7 +50,7 @@ def artist_songs(artist_id, page):
     querystring = {"id": artist_id, "sort": "title", "per_page": "50", "page": page}
 
     headers = {
-        "x-rapidapi-key": GENIUS_API_KEY,
+        "x-rapidapi-key": setup_key(),
         "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
     }
 
@@ -78,7 +80,7 @@ def get_song_lyrics(song_id):
     querystring = {"id": int(song_id)}
 
     headers = {
-        "x-rapidapi-key": GENIUS_API_KEY,
+        "x-rapidapi-key": setup_key(),
         "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
     }
 

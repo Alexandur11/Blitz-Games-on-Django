@@ -56,8 +56,11 @@ class MusicService:
         Each artist object is expected to have a `songs` attribute with song IDs in a comma-separated string.
         The selected artist's repertoire is stored in `artists_repertoire`.
         """
-        artists_songs = [x.songs[1:-1].split(',') for x in self.artists]
-        self.artists_repertoire = random.choice(artists_songs)
+        try:
+            artists_songs = [x.songs[1:-1].split(',') for x in self.artists]
+            self.artists_repertoire = random.choice(artists_songs)
+        except IndexError:
+            raise IndexError('No songs for this artist in the database')
 
     def song_selector(self):
         """
@@ -97,6 +100,8 @@ class MusicService:
 
         The method also prints the selected artist, song, and verse for debugging purposes.
         """
+        if not artists:
+            raise Exception('Not artists inside the database')
         self.artists = artists
         self.artist_selector()
         self.song_selector()
