@@ -1,6 +1,8 @@
-Django
-requests
-python_dotenv
-mysqlclient
-beautifulsoup4
-discord
+Django==5.1.4
+requests==2.32.3
+python-dotenv==1.0.1
+beautifulsoup4==4.12.3
+discord==2.3.2
+pytest==8.3.4
+pytest-asyncio==0.25.1
+pytest-mock==3.14.0
