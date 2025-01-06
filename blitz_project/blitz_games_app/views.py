@@ -1,115 +1,186 @@
+"""
+Views Documentation
+===================
+
+This module contains Django views for handling various endpoints related to movies, TV shows, and music.
+Each view interacts with the database models and services to provide data or render templates.
+
+Views:
+------
+- random_movie(request): Returns a JSON response with details of a randomly selected movie.
+- random_show(request): Returns a JSON response with details of a randomly selected TV show.
+- random_song(request): Returns a JSON response with a random song's artist, title, and verse.
+- home_page(request): Renders the home page.
+- movies_page(request): Renders a movie page with a randomly selected movie.
+- tv_shows_page(request): Renders a TV shows page with a randomly selected TV show.
+- music_page(request): Renders a music page with a randomly selected artist.
+"""
 
 import random
-
+from django.http import JsonResponse
 from django.shortcuts import render
-from .models import Movie,Series,Artists
+from .models import Movie, Series, Artists
 from .services.music_service import MusicService
 
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-
-
-
-
+# Initialize the MusicService instance
 MS = MusicService()
+
+# Fetch all database objects for reuse
 artists = Artists.objects.all()
 movies = Movie.objects.all()
 shows = Series.objects.all()
 
-def random_movie(request):
-    random_movie = random.choice(movies)
-    data =  {'title':random_movie.title,
-            'image':random_movie.primaryImage,
-            'year':random_movie.startYear,
-            'content_rating':random_movie.contentRating,
-            'votes':random_movie.numVotes,
-            'description':random_movie.description,
-            'average_rating':random_movie.averageRating}
 
+def random_movie(request):
+    """
+    Returns a JSON response with details of a randomly selected movie.
+
+    Parameters:
+    -----------
+    - request: The HTTP request object.
+
+    Returns:
+    --------
+    JsonResponse: A JSON object containing movie details:
+        - title
+        - image
+        - year
+        - content_rating
+        - votes
+        - description
+        - average_rating
+    """
+    movie = random.choice(movies)
+    data = {
+        'title': movie.title,
+        'image': movie.primaryImage,
+        'year': movie.startYear,
+        'content_rating': movie.contentRating,
+        'votes': movie.numVotes,
+        'description': movie.description,
+        'average_rating': movie.averageRating
+    }
     return JsonResponse(data)
+
 
 def random_show(request):
-    random_show = random.choice(shows)
-    data =  {'title':random_show.title,
-            'image':random_show.primaryImage,
-            'year':random_show.startYear,
-            'content_rating':random_show.contentRating,
-            'votes':random_show.numVotes,
-            'description':random_show.description,
-            'average_rating':random_show.averageRating}
+    """
+    Returns a JSON response with details of a randomly selected TV show.
 
+    Parameters:
+    -----------
+    - request: The HTTP request object.
+
+    Returns:
+    --------
+    JsonResponse: A JSON object containing TV show details:
+        - title
+        - image
+        - year
+        - content_rating
+        - votes
+        - description
+        - average_rating
+    """
+    show = random.choice(shows)
+    data = {
+        'title': show.title,
+        'image': show.primaryImage,
+        'year': show.startYear,
+        'content_rating': show.contentRating,
+        'votes': show.numVotes,
+        'description': show.description,
+        'average_rating': show.averageRating
+    }
     return JsonResponse(data)
+
 
 def random_song(request):
+    """
+    Returns a JSON response with a random song's details.
+
+    Parameters:
+    -----------
+    - request: The HTTP request object.
+
+    Returns:
+    --------
+    JsonResponse: A JSON object containing song details:
+        - artist
+        - song
+        - verse
+    """
     MS.quiz_preparation(artists)
-
-    data =  {'artist':MS.artist,
-            'song':MS.song_title,
-            'verse':MS.quiz_verse}
-
+    data = {
+        'artist': MS.artist,
+        'song': MS.song_title,
+        'verse': MS.quiz_verse
+    }
     return JsonResponse(data)
-
-
-from django.http import JsonResponse
-import json
-
-
-# Verification function remains as before if you want signature validation
-# from your previous code.
 
 
 def home_page(request):
+    """
+    Renders the home page.
+
+    Parameters:
+    -----------
+    - request: The HTTP request object.
+
+    Returns:
+    --------
+    HttpResponse: Renders the `home_page.html` template.
+    """
     return render(request, 'home_page.html', {})
 
 
 def movies_page(request):
-    random_movie = random.choice(movies)
-    return render(request, 'movie_page.html', {'random_movie':random_movie})
+    """
+    Renders a movie page with a randomly selected movie.
+
+    Parameters:
+    -----------
+    - request: The HTTP request object.
+
+    Returns:
+    --------
+    HttpResponse: Renders the `movie_page.html` template with context:
+        - random_movie: A randomly selected movie object.
+    """
+    movie = random.choice(movies)
+    return render(request, 'movie_page.html', {'random_movie': movie})
+
 
 def tv_shows_page(request):
+    """
+    Renders a TV shows page with a randomly selected TV show.
+
+    Parameters:
+    -----------
+    - request: The HTTP request object.
+
+    Returns:
+    --------
+    HttpResponse: Renders the `series_page.html` template with context:
+        - random_tv_show: A randomly selected TV show object.
+    """
     random_tv_show = random.choice(shows)
-    return render(request,'series_page.html',{'random_tv_show':random_tv_show})
+    return render(request, 'series_page.html', {'random_tv_show': random_tv_show})
+
 
 def music_page(request):
+    """
+    Renders a music page with a randomly selected artist.
 
-    # songs = recursive_collection(None,1)
-    # songs_list = []
-    # for x in songs:
-    #     if x:
-    #         songs_list.extend(x)
-    # songs_list.pop()
-    # Artists(id=2,songs=songs_list).save()
-    #
-    #
-    # # MS.quiz_preparation(artists)
+    Parameters:
+    -----------
+    - request: The HTTP request object.
 
-    artists = Artists.objects.all()
-
+    Returns:
+    --------
+    HttpResponse: Renders the `music_page.html` template with context:
+        - artist: A randomly selected artist object.
+        - text: Currently set to None.
+    """
     artist = random.choice(artists)
-    text = 'asdas'
-
-
-
-    return render(request, 'music_page.html', {'artist':artist,'text':text})
-
-
-cole = [599410, 4254003, 6808751, 5838250, 5838217, 354242, 3656498, 3753813, 3691852,
-        3663828, 4674445, 3726621, 8306505, 104024, 1742597, 87297, 114703, 1975,
-        5709850, 10179412, 146929, 2924190, 10245204, 10320953, 8404414,
-        3207767, 6808753, 180979, 309069, 7725352, 8878884, 3039974, 164660, 3886292,
-        791, 9042595, 9608854, 9404814, 9608855, 4155494, 4348344, 6809873,
-        3351445, 527858, 8879059, 5636588, 10916034, 599442, 4254020, 6808745, 3955843, 58, 677,
-        599407, 1786456, 4254008, 51425, 3658953, 192981, 8820261, 117, 52357, 3745000, 6866810,
-        7148894, 675, 3674230, 1896, 496704, 622098, 53865, 2914474, 2021, 181167, 8568149,
-        350105, 7787390, 2378981, 217104, 1869778, 11172039]
-
-
-nas = [16507, 4032413, 92105, 6194925, 730650, 79279, 9312591, 6353283, 6353286, 760471, 6071906,
-       8951488, 3429112, 9971091, 5428047, 8018789, 51942, 8988497, 704703,
-       228375, 6627960, 10410280, 4013942, 741718, 689296, 670350, 2304945,
-       7836999, 1246487, 201, 2896309, 4064434, 2934107, 1848417, 7110483, 1074900,
-       704724, 2121104, 676184, 10410281, 689310, 74258, 27155, 16552, 7541151, 747166, 6928136,
-       17178, 27173, 5600678, 704700, 27200, 83819, 50785, 9291540, 9291538, 8990257, 6046073,
-       44965, 747117, 73080, 747124, 747165, 27188, 42253, 27189, 10451095, 6928122, 1815785,
-       18557, 2670511, 60923, 27191, 1866305, 139, 4285732, 57588, 4007705, 689287, 11356, 43108,
-       7315905, 9971088, 743421, 3767119]
+    return render(request, 'music_page.html', {'artist': artist, 'text': None})

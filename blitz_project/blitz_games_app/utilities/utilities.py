@@ -2,13 +2,13 @@ import requests
 import random
 from django.conf import settings
 
-
 GENIUS_KEYS = [getattr(settings, 'GENIUS_API_KEY', None),
                getattr(settings, 'GENIUS_API_KEY2', None)]
 
 GENIUS_API_KEY = random.choice(GENIUS_KEYS)
-def get_artist_albums(artist_id):
 
+
+def get_artist_albums(artist_id):
     url = "https://genius-song-lyrics1.p.rapidapi.com/artist/albums/"
 
     querystring = {"id": artist_id, "sort": "title", "per_page": "20", "page": "1"}
@@ -41,7 +41,8 @@ def album_details(album_id):
 
     print(response)
 
-def artist_songs(artist_id,page):
+
+def artist_songs(artist_id, page):
     url = "https://genius-song-lyrics1.p.rapidapi.com/artist/songs/"
 
     querystring = {"id": artist_id, "sort": "title", "per_page": "50", "page": page}
@@ -54,8 +55,6 @@ def artist_songs(artist_id,page):
     return requests.get(url, headers=headers, params=querystring).json()
 
 
-
-
 def collect_songs(songs):
     filtered_songs = []
     for x in songs:
@@ -64,15 +63,13 @@ def collect_songs(songs):
     return filtered_songs
 
 
-
-def recursive_collection(artist_id,page):
+def recursive_collection(artist_id, page):
     if not page:
         return
 
-
     info = artist_songs(artist_id, page)
     filtered_songs = collect_songs(info['songs'])
-    return filtered_songs, recursive_collection(artist_id,info['next_page'])
+    return filtered_songs, recursive_collection(artist_id, info['next_page'])
 
 
 def get_song_lyrics(song_id):
@@ -85,7 +82,7 @@ def get_song_lyrics(song_id):
         "x-rapidapi-host": "genius-song-lyrics1.p.rapidapi.com"
     }
 
-    response =  requests.get(url, headers=headers, params=querystring)
+    response = requests.get(url, headers=headers, params=querystring)
     if response.status_code != 200:
         return response.content
     return response.json()
