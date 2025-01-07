@@ -2,8 +2,9 @@ pipeline {
     agent any
 
     environment {
-        // Define the service name for Django
-        DJANGO_TEST_SERVICE = 'django'
+        // Define the image name for Django
+        DJANGO_IMAGE = 'django_app_image'
+        DJANGO_TEST_SERVICE = 'django'  // Service name is just for reference
     }
 
     stages {
@@ -16,24 +17,30 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Build Docker image for Django service
-                sh 'docker-compose build $DJANGO_TEST_SERVICE'
+                script {
+                    // Build the Docker image for the Django application
+                    sh 'docker build -t $DJANGO_IMAGE .'
+                }
             }
         }
 
         stage('Run Django Tests') {
             steps {
-                // Run Django tests using the default test.py
-                sh """
-                docker-compose run --rm $DJANGO_TEST_SERVICE sh -c "python manage.py test"
-                """
+                script {
+                    // Run Django tests using the Docker container
+                    sh """
+                    docker run --rm $DJANGO_IMAGE python manage.py test
+                    """
+                }
             }
         }
 
         stage('Cleanup') {
             steps {
-                // Stop and remove containers, networks, and volumes
-                sh 'docker-compose down --volumes --remove-orphans'
+                script {
+                    // Optionally stop any containers or remove images if needed
+                    sh 'docker image prune -f'
+                }
             }
         }
     }
