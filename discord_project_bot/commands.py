@@ -1,5 +1,5 @@
 import requests
-from .settings import django_server
+from settings import django_server
 
 latest_movie_data = {}
 latest_show_data = {}
