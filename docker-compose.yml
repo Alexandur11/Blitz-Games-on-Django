@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: ./blitz_project
+    container_name: django_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./blitz_project:/app
+    environment:
+      DJANGO_ALLOWED_HOSTS: localhost
+    depends_on:
+      - db
+
+  discord_bot:
+    build:
+      context: ./discord
+    container_name: discord_bot
+    volumes:
+      - ./discord:/app
+    environment:
+      DISCORD_TOKEN: your_discord_bot_token  # Add your bot's token in .env or directly here
+    restart: always
+
