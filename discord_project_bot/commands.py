@@ -1,9 +1,11 @@
 import requests
 from settings import django_server
+from utils import *
+import random
 
-latest_movie_data = {}
-latest_show_data = {}
-song_artist = {}
+
+latest_cinematic_data = {}
+latest_song_artist = {}
 
 
 def setup(bot):
@@ -19,10 +21,10 @@ def setup(bot):
         """Sends a small verse from a song. """
 
         try:
-            global song_artist
-            song_artist = requests.get(f'{django_server}random_song').json()
+            global latest_song_artist
+            latest_song_artist = requests.get(f'{django_server}random_song').json()
             await ctx.send(
-                f"Year: {song_artist['verse']}")
+                f"Year: {latest_song_artist['verse']}")
         except Exception as e:
             await ctx.send(f"An error occurred while fetching song details: {e}")
 
@@ -34,25 +36,26 @@ def setup(bot):
             Caches the artist data for later use in other commands.
         """
 
-        if song_artist:
-            await ctx.send(f"Artist: {song_artist['artist']}\n"
-                           f"Song: {song_artist['song']}")
+        if latest_song_artist:
+            await ctx.send(f"Artist: {latest_song_artist['artist']}\n"
+                           f"Song: {latest_song_artist['song']}")
         else:
             await ctx.send(
                 "No movie data available! Please use the `!movie` command first."
             )
+        latest_song_artist.clear()
 
-    @bot.command(name='s')
-    async def tv_show_details(ctx):
-
+    @bot.command(name='cinematic')
+    async def cinematic_details(ctx):
         """
-            Sends all details about a random show except the average rating.
-            Caches the show data for later use in other commands.
-            """
+            Sends all details about a random show or movie except the average rating.
+            Caches the data for later use in other commands.
+        """
 
         try:
-            global latest_show_data
-            latest_show_data = requests.get(f'{django_server}/random_show').json()
+            global latest_cinematic_data
+            cinematic_type = random.choice(['random_show','random_movie'])
+            latest_show_data = requests.get(f'{django_server}/{cinematic_type}').json()
             await ctx.send(
                 f"Movie Title: {latest_show_data['title']}\n"
                 f"Image URL: {latest_show_data['image']}\n"
@@ -63,52 +66,43 @@ def setup(bot):
         except Exception as e:
             await ctx.send(f"An error occurred while fetching series details: {e}")
 
-    @bot.command(name='tr')
-    async def tv_show_rating(ctx):
-
+    @bot.command(name='rating')
+    async def cinematic_rating(ctx):
         """
-           Sends the rating of the latest fetched show.
-           Uses cached data from the last `!tr` command.
-           """
+               Sends the rating of the latest fetched show.
+               Uses cached data from the last `!tr` command.
+               """
 
-        if latest_show_data:
-            await ctx.send(f"Title: {latest_show_data['title']}\n"
-                           f"Rating: {latest_show_data['average_rating']}")
+        if latest_cinematic_data:
+            await ctx.send(f"Title: {latest_cinematic_data['title']}\n"
+                           f"Rating: {latest_cinematic_data['average_rating']}")
         else:
             await ctx.send(
-                "No movie data available! Please use the `!movie` command first."
+                "No Cinematic data available!"
             )
+        latest_cinematic_data.clear()
 
-    @bot.command(name="m")
-    async def movie_details(ctx):
-        """
-        Sends all details about a random movie except the average rating.
-        Caches the movie data for later use in other commands.
-        """
+    @bot.command()
+    async def guess(ctx,guess:str):
+        if not latest_song_artist or not latest_cinematic_data:
+            return
 
-        try:
-            global latest_movie_data
-            latest_movie_data = requests.get(f'{django_server}random_movie').json()
-            await ctx.send(
-                f"Movie Title: {latest_movie_data['title']}\n"
-                f"Image URL: {latest_movie_data['image']}\n"
-                f"Year: {latest_movie_data['year']}\n"
-                f"Content Rating: {latest_movie_data['content_rating']}\n"
-                f"Description: {latest_movie_data['description']}"
-            )
-        except Exception as e:
-            await ctx.send(f"An error occurred while fetching movie details: {e}")
+        user_guess = None
 
-    @bot.command(name="mr")
-    async def movie_rating(ctx):
-        """
-        Sends the rating of the latest fetched movie.
-        Uses cached data from the last `!movie` command.
-        """
-        if latest_movie_data:
-            await ctx.send(f"Title: {latest_movie_data['title']}\n"
-                           f"Rating: {latest_movie_data['average_rating']}")
+        if latest_song_artist:
+            user_guess = compare_musical_guess(guess=guess,song_data=latest_song_artist)
+            response = song_artist() if user_guess else 'You guessed wrong'
+            await ctx.send(response)
         else:
-            await ctx.send(
-                "No movie data available! Please use the `!movie` command first."
-            )
+            user_guess = compare_rating_guess(guess=guess,the_truth=latest_cinematic_data['average_rating'])
+            response = cinematic_rating() if user_guess else 'You guessed wrong'
+            await ctx.send(response)
+
+        if user_guess:
+            latest_song_artist.clear()
+            latest_cinematic_data.clear()
+
+
+
+
+
