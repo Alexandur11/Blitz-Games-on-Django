@@ -2,15 +2,14 @@ pipeline {
     agent any
 
     environment {
-        // Define the image name for Django
-        DJANGO_IMAGE = 'django_app_image'
-        DJANGO_TEST_SERVICE = 'django'  // Service name is just for reference
+        // Define the Docker image name for Django
+        DJANGO_IMAGE = 'blitz_games_django_image'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from your repository
+                // Checkout the code from the Git repository
                 checkout scm
             }
         }
@@ -18,16 +17,16 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image for the Django application
+                    // Build the Docker image using the Dockerfile in the root directory
                     sh 'docker build -t $DJANGO_IMAGE .'
                 }
             }
         }
 
-        stage('Run Django Tests') {
+        stage('Run Tests') {
             steps {
                 script {
-                    // Run Django tests using the Docker container
+                    // Run Django tests inside the Docker container
                     sh """
                     docker run --rm $DJANGO_IMAGE python manage.py test
                     """
@@ -38,8 +37,8 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    // Optionally stop any containers or remove images if needed
-                    sh 'docker image prune -f'
+                    // Clean up unused Docker images and containers
+                    sh 'docker system prune -f --volumes'
                 }
             }
         }
@@ -47,14 +46,14 @@ pipeline {
 
     post {
         always {
-            // Always clean up Docker resources after pipeline execution
-            sh 'docker system prune -f'
+            // Ensure cleanup runs even if the pipeline fails
+            sh 'docker system prune -f --volumes'
         }
         success {
-            echo 'Django tests passed successfully!'
+            echo 'Tests passed successfully!'
         }
         failure {
-            echo 'Django tests failed. Please check the logs for details.'
+            echo 'Tests failed. Please check the logs for more details.'
         }
     }
 }
