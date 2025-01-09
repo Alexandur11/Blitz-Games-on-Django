@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+import logging
 
 """
 Parsing Utilities Documentation
@@ -40,8 +41,9 @@ def parse_lyrics_response(response_data):
         artist = track_data['primary_artist']
 
         return {'artist': artist, 'title': song_title, 'html_content': html_content}
-    except Exception as e:
-        raise e
+    except (KeyError,TypeError,AttributeError,ValueError) as e:
+        logging.exception(e)
+
 
 
 def parse_song_lyrics(html_content):
@@ -85,5 +87,5 @@ def parse_song_lyrics(html_content):
         for item in parsed_data:
             song_verses.append({item['lyrics']})
         return song_verses
-    except Exception as e:
-        raise e
+    except (TypeError,ValueError,AttributeError,KeyError) as e:
+        logging.exception(e)

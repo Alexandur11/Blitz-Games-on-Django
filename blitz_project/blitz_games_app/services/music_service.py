@@ -15,10 +15,12 @@ selected artist's repertoire. - verse_selector(): Randomly selects a verse from 
 quiz_preparation(artists): Prepares the music quiz by selecting an artist, song, and verse while retrieving the
 song's details."""
 
+import logging
 import random
 from ..utilities.parsing_utilities import *
 from ..utilities.utilities import get_song_lyrics
 
+logger = logging.getLogger(__name__)
 
 class MusicService:
     """
@@ -59,8 +61,8 @@ class MusicService:
         try:
             artists_songs = [x.songs[1:-1].split(',') for x in self.artists]
             self.artists_repertoire = random.choice(artists_songs)
-        except IndexError:
-            raise IndexError('No songs for this artist in the database')
+        except IndexError as e :
+            logger.exception(e)
 
     def song_selector(self):
         """

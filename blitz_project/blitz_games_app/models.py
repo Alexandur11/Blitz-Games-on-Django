@@ -44,3 +44,6 @@ class Artists(models.Model):
     songs = models.TextField()
     image = models.URLField(default='https://img.freepik.com/premium-vector/man-singer-silhouette-man-singing-mic'
                                     '-singer-singing-silhouette-vocalist-singing-microphone_690577-1487.jpg?w=1060')
+
+    def __str__(self):
+        return f"{self.id} | {self.songs} | {self.image}"

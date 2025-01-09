@@ -3,6 +3,9 @@
 import os
 import sys
 
+sys.path.append('/Users/aleksandardaskalov/PycharmProjects/Blitz-Games-on-Django/')
+import logging_setup
+
 
 def main():
     """Run administrative tasks."""
@@ -19,4 +22,5 @@ def main():
 
 
 if __name__ == '__main__':
+    logging_setup.setup_logging()
     main()

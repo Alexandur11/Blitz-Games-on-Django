@@ -1,0 +1,21 @@
+
+--------------------
+Timestamp: 2025-01-09 09:51:26,724
+Level: INFO
+Message: Watching for file changes with StatReloader
+--------------------
+
+
+--------------------
+Timestamp: 2025-01-09 09:51:37,145
+Level: INFO
+Message: /Users/aleksandardaskalov/PycharmProjects/Blitz-Games-on-Django/blitz_project/manage.py changed, reloading.
+--------------------
+
+
+--------------------
+Timestamp: 2025-01-09 09:51:37,415
+Level: INFO
+Message: Watching for file changes with StatReloader
+--------------------
+
