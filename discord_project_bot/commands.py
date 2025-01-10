@@ -33,7 +33,6 @@ def setup(bot):
 
         """
             Sends all details about an artist.
-            Caches the artist data for later use in other commands.
         """
 
         if latest_song_artist:
